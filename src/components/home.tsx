@@ -91,7 +91,7 @@
 //     }, 380);
 
 //     try {
-//       const response = await fetch("http://localhost:5000/api/scan", {
+//       const response = await fetch("http://https://ai-vpan-backend.onrender.com/api/scan", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({
@@ -1084,7 +1084,7 @@ const Home = () => {
     }, 380);
 
     try {
-      const response = await fetch("http://localhost:5000/api/scan", {
+      const response = await fetch("http://https://ai-vpan-backend.onrender.com/api/scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

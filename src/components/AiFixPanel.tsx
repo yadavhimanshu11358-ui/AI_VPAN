@@ -18,7 +18,7 @@ export const AiFixPanel: React.FC<AiFixPanelProps> = ({ title, description }) =>
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/ai-fix", {
+      const response = await fetch("http://https://ai-vpan-backend.onrender.com/api/ai-fix", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, description }),
