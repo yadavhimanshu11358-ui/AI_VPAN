@@ -18,6 +18,7 @@ import {
   Shield,
   Globe,
   Server,
+  Settings,
   Database,
   Network,
   Lock,
@@ -25,6 +26,7 @@ import {
   Eye,
   Activity,
   Brain,
+  Cpu,
   Sparkles,
 } from "lucide-react";
 
@@ -137,14 +139,42 @@ const TargetSpecificationPanel = ({
     });
   };
 
-  const handleScanInitiate = () => {
-    // पेरेंट कॉम्पोनेन्ट (home.tsx) को सही डेटा पास करना ताकि लाइव स्कैन शुरू हो सके
+ const handleScanInitiate = async () => {
+    // 1. फ्रंटएंड के UI को स्कैनिंग स्टेट में डालने के लिए पुराना फंक्शन
     onScanInitiate({
       targetType,
       targetValue,
       assessmentProfile,
       configOptions: configOptions[assessmentProfile],
     });
+
+    // 2. पायथन बैकएंड को असली रिक्वेस्ट भेजना
+    try {
+      console.log("Sending target to Python backend:", targetValue);
+      
+      const response = await fetch("http://127.0.0", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          target: targetValue
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Real Vulnerability Data Received:", data);
+      
+      // आने वाले डेटा को डैशबोर्ड में दिखाने के लिए अलर्ट या स्टेट में सेव कर सकते हैं
+      alert("स्कैन पूरा हुआ! बैकएंड से डेटा मिल गया है। Console चेक करें।");
+      
+    } catch (error) {
+      console.error("पायथन सर्वर से कनेक्ट करने में एरर आई:", error);
+    }
   };
 
   const getTargetPlaceholder = () => {
@@ -594,7 +624,7 @@ const TargetSpecificationPanel = ({
               onClick={handleScanInitiate}
               variant="scanner"
               size="lg"
-              className="w-full relative overflow-hidden group cursor-pointer"
+              className="w-full relative overflow-hidden group"
               disabled={!targetValue.trim()}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
